@@ -45,12 +45,21 @@ class GLMBandit:
     
     def create_arms(self):
         arms = []
+        i_max = self.rng.integers(self.L)
+        x_max = self.theta / np.linalg.norm(self.theta) * self.M
         i = 0
         while(i < self.L):
-            x_proxy = self.rng.uniform(-1, 1, size=self.d)
-            x_i = self.rng.uniform(0, self.M) * x_proxy / np.linalg.norm(x_proxy)
-            arms.append(x_i)
-            i += 1
+            if i == i_max:
+                arms.append(x_max)
+                i += 1
+            else:
+                x_proxy = self.rng.uniform(-1, 1, size=self.d)
+                x_i = self.rng.uniform(0, self.M) * x_proxy / np.linalg.norm(x_proxy)
+                if self.model == 'Logistic':
+                    if np.dot(x_i, self.theta) < -0.05 * np.dot(x_max, self.theta):
+                        arms.append(x_i)
+            #arms.append(x_i)
+                        i += 1
         return arms
     
     def calculate_kappa(self):
@@ -97,6 +106,7 @@ class GLMBandit:
             rewards = [probit(dot_product) for dot_product in dot_products]
             noisy_rewards = [float(self.rng.normal(dot_product) > 0.0) for dot_product in dot_products]
             regrets = [self.max_reward[self.t] - reward for reward in rewards]
+        #print("Best arm:", self.best_arm[self.t])
         self.t += 1
         return noisy_rewards, regrets, self.arms[self.t % self.T]
     

@@ -59,10 +59,11 @@ class RSGLBandit:
                 if succ_flag:
                     self.theta_hat_tau = thth
             
-            # Eliminate arms
+            # Eliminate arms based on warm-up theta
             max_lcb = -np.inf
             arm_idx = []
             ucb_arr = []
+            # Compute LCB and UCB of each arm
             for i in range(self.K):
                 lcb_idx = np.dot(self.theta_hat_w, self.arms[i]) \
                         - self.reg * np.sqrt(self.kappa) * mat_norm(self.arms[i], self.V_inv)
@@ -71,11 +72,11 @@ class RSGLBandit:
                 ucb_arr.append(ucb_idx)
                 if lcb_idx > max_lcb:
                     max_lcb = lcb_idx
-            
+            # Eliminate arms
             for i in range(self.K):
                 if ucb_arr[i] >= max_lcb:
                     arm_idx.append(i)
-            
+            # Find max UCB arm
             max_ind = -np.inf
             self.a_t = -1
             for i in arm_idx:
@@ -84,20 +85,21 @@ class RSGLBandit:
                 if ucb_ind > max_ind:
                     max_ind = ucb_ind
                     self.a_t = i
-        
+        #print("Arm played", self.a_t)
         return self.a_t
     
     def update(self, reward, regret, next_arms):
         self.regret_arr.append(regret)
-
+        # If this was a warm up round, append (x, y) to warm-up set, re-compute theta_hat_w
         if self.flag:
             self.warm_up_X.append(self.arms[self.a_t])
             self.warm_up_Y.append(reward)
             thth, succ_flag = solve_glm_mle(self.theta_hat_w, np.array(self.warm_up_X), \
                                                 np.array(self.warm_up_Y), self.reg, self.model)
             if succ_flag:
-                self.theta_hat_w = thth
+                self.theta_hat_w = thth # update theta_hat_w if mle solution was successful
         
+        # Else add (x, y) to non warm-up set
         else:
             self.non_warm_up_X.append(self.arms[self.a_t])
             self.non_warm_up_Y.append(reward)
@@ -105,6 +107,7 @@ class RSGLBandit:
                 mudp = dsigmoid(np.dot(self.arms[self.a_t], self.theta_hat_w))
             elif self.model == 'Probit':
                 mudp = dprobit(np.dot(self.arms[self.a_t], self.theta_hat_w))
+            # Update current H matrix
             self.curr_H += (mudp / self.e) * np.outer(self.arms[self.a_t], self.arms[self.a_t])
         
         self.t += 1
