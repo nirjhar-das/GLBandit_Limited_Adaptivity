@@ -36,11 +36,12 @@ def dprobit(x):
     return (1.0 / np.sqrt(2*np.pi)) * np.exp(-x*x/2.0)
 
 def solve_glm_mle(theta_prev, X, Y, lmbda, model):
-    res = minimize(log_loss_glm, theta_prev,\
-                   jac=grad_log_loss_glm, hess=hess_log_loss_glm, \
-                    args=(X, Y, lmbda, model), method='Newton-CG')
-    
-    if not res.success:
-        print(res.message)
+    # res = minimize(log_loss_glm, theta_prev,\
+    #                jac=grad_log_loss_glm, hess=hess_log_loss_glm, \
+    #                 args=(X, Y, lmbda, model), method='Newton-CG')
+    res = minimize(log_loss_glm, theta_prev, args=(X, Y, lmbda, model))
+    # if not res.success:
+    #     print(res.message)
+
     theta_hat, succ_flag = res.x, res.success
     return theta_hat, succ_flag
