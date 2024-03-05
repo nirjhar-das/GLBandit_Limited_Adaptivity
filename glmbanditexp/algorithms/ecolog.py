@@ -30,7 +30,7 @@ class EcoLog:
         self.arm_norm_ub = 1.0
         self.dim = arm_set[0].shape[0]
         self.failure_level = delta
-        self.l2reg = 1
+        self.l2reg = 10.0
         self.vtilde_matrix = self.l2reg * np.eye(self.dim)
         self.vtilde_matrix_inv = (1 / self.l2reg) * np.eye(self.dim)
         self.theta = np.zeros((self.dim,))

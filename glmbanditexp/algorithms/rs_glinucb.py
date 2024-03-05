@@ -1,5 +1,5 @@
 import numpy as np
-from utils import mat_norm, solve_glm_mle, dsigmoid, dprobit
+from glmbanditexp.utils.utils import mat_norm, solve_glm_mle, dsigmoid, dprobit
 
 class RS_GLinUCB:
     def __init__(self, arm_set, kappa, R, S, model, T, delta):

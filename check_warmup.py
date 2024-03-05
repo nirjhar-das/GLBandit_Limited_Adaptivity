@@ -3,7 +3,7 @@ import numpy as np
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 
-from utils import mat_norm
+from glmbanditexp.utils.utils import mat_norm
 
 
 def check_warmup_count(d=5, K=20, T=20000, kappa=50.0, R=1.0, S=5.0, lmbda=2.0, seed=186329):

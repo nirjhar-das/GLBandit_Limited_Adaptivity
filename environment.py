@@ -50,8 +50,12 @@ class GLMBandit:
         # x_max = self.theta / np.linalg.norm(self.theta) * self.M
         i = 0
         while(i < self.L):
-            x_proxy = self.rng.uniform(-1, 1, size=self.d)
-            x_i = self.rng.uniform(0, self.M) * x_proxy / np.linalg.norm(x_proxy)
+            # x_proxy = self.rng.uniform(-1, 1, size=self.d)
+            # x_i = self.rng.uniform(0, self.M) * x_proxy / np.linalg.norm(x_proxy)
+            x_proxy = self.rng.normal(0.0, 1.0, size=(self.d,))
+            norm = np.linalg.norm(x_proxy)
+            r = self.rng.uniform(0.0, 1.0) ** (1.0 / self.d)
+            x_i = x_proxy * r / norm
             arms.append(x_i)
             i += 1
             # if i == i_max:
