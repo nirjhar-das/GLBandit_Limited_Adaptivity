@@ -1,6 +1,20 @@
+
 import numpy as np
 from scipy.stats import norm
 from scipy.optimize import minimize
+from scipy.linalg import sqrtm
+
+
+def weighted_norm(x, A):
+    return np.sqrt(np.dot(x, np.dot(A, x)))
+
+
+def gaussian_sample_ellipsoid(center, design, radius):
+    dim = len(center)
+    sample = np.random.normal(0, 1, (dim,))
+    res = np.real_if_close(center + np.linalg.solve(sqrtm(design), sample) * radius)
+    return res
+
 
 def mat_norm(vec, matrix):
     return np.sqrt(np.dot(vec, np.dot(matrix, vec)))

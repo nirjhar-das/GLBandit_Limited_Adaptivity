@@ -1,8 +1,9 @@
 import numpy as np
 from utils import mat_norm, solve_glm_mle, dsigmoid, dprobit
 
-class RSGLBandit:
+class RS_GLinUCB:
     def __init__(self, arm_set, kappa, R, S, model, T, delta):
+        self.name = 'RS-GLinUCB'
         self.arms = arm_set
         self.d = self.arms[0].shape[0]
         self.K = len(self.arms)
@@ -19,7 +20,7 @@ class RSGLBandit:
         self.V_inv = (1.0 / self.lmbda) * np.eye(self.d)
         self.curr_H = self.lmbda * np.eye(self.d)
         self.prev_H = 0 * np.eye(self.d)
-        self.warmup_threshold = 1.0 / (self.kappa * self.R**4 * self.S**2 * self.d)
+        self.warmup_threshold = 1.0 / (0.01 * self.kappa * self.R**4 * self.S**2 * self.d)
         self.t = 1
         self.theta_hat_w = np.zeros((self.d,))
         self.theta_hat_tau = np.zeros((self.d,))

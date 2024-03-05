@@ -1,5 +1,6 @@
 import numpy as np
 import json
+from tqdm import tqdm
 import os
 from copy import deepcopy
 from utils import dsigmoid, sigmoid, dprobit, probit
@@ -45,33 +46,45 @@ class GLMBandit:
     
     def create_arms(self):
         arms = []
-        i_max = self.rng.integers(self.L)
-        x_max = self.theta / np.linalg.norm(self.theta) * self.M
+        # i_max = self.rng.integers(self.L)
+        # x_max = self.theta / np.linalg.norm(self.theta) * self.M
         i = 0
         while(i < self.L):
-            if i == i_max:
-                arms.append(x_max)
-                i += 1
-            else:
-                x_proxy = self.rng.uniform(-1, 1, size=self.d)
-                x_i = self.rng.uniform(0, self.M) * x_proxy / np.linalg.norm(x_proxy)
-                if self.model == 'Logistic':
-                    if np.dot(x_i, self.theta) < -0.05 * np.dot(x_max, self.theta):
-                        arms.append(x_i)
+            x_proxy = self.rng.uniform(-1, 1, size=self.d)
+            x_i = self.rng.uniform(0, self.M) * x_proxy / np.linalg.norm(x_proxy)
+            arms.append(x_i)
+            i += 1
+            # if i == i_max:
+            #     arms.append(x_max)
+            #     i += 1
+            # else:
+            #     x_proxy = self.rng.uniform(-1, 1, size=self.d)
+            #     x_i = self.rng.uniform(0, self.M) * x_proxy / np.linalg.norm(x_proxy)
+            #     if self.model == 'Logistic':
+            #         if np.dot(x_i, self.theta) < -0.05 * np.dot(x_max, self.theta):
+            #             arms.append(x_i)
             #arms.append(x_i)
-                        i += 1
+            #            i += 1
         return arms
     
     def calculate_kappa(self):
         min_mu_dot = np.inf
-        for arm_set in self.arms:
-            for i, x in enumerate(arm_set):
-                if self.model == 'Logistic':
-                    mu_dot = dsigmoid(np.dot(x, self.theta))
-                elif self.model == 'Probit':
-                    mu_dot = dprobit(np.dot(x, self.theta))
-                if mu_dot < min_mu_dot:
-                    min_mu_dot = mu_dot
+        print('Calculating kappa...')
+        for arm_set in tqdm(self.arms):
+            X_mat = np.array(arm_set)
+            dotp = np.dot(X_mat, self.theta)
+            if self.model == 'Logistic':
+                mu_dot = dsigmoid(dotp)
+            elif self.model == 'Probit':
+                mu_dot = dprobit(dotp)
+            min_mu_dot = min_mu_dot if np.min(mu_dot) > min_mu_dot else np.min(mu_dot)
+            # for i, x in enumerate(arm_set):
+            #     if self.model == 'Logistic':
+            #         mu_dot = dsigmoid(np.dot(x, self.theta))
+            #     elif self.model == 'Probit':
+            #         mu_dot = dprobit(np.dot(x, self.theta))
+            #     if mu_dot < min_mu_dot:
+            #         min_mu_dot = mu_dot
         return 1.0/min_mu_dot
     
     def get_best_arm(self):
