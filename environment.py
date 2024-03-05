@@ -3,7 +3,7 @@ import json
 from tqdm import tqdm
 import os
 from copy import deepcopy
-from utils import dsigmoid, sigmoid, dprobit, probit
+from glmbanditexp.utils.utils import dsigmoid, sigmoid, dprobit, probit
 
 class GLMBandit:
     def __init__(self, name=None, config=None, load=None):
