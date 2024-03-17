@@ -36,7 +36,7 @@ class GlmUCB:
         :param do_proj: whether to perform the projection step required by theory (default: False)
         :param lazy_update_fr:  integer dictating the frequency at which to do the learning if we want the algo to be lazy (default: 1)
         """
-        self.name = 'GLM-UCB'
+        self.name = 'GLM-UCB (Filippi et al. 2010)'
         self.model = model
         self.param_norm_ub = S
         self.arm_norm_ub = 1.0

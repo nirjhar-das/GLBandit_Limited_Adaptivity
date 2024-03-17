@@ -25,7 +25,7 @@ ctr : int
 
 class EcoLog:
     def __init__(self, arm_set, kappa, R, S, model, delta):
-        self.name = 'EcoLog'
+        self.name = 'EcoLog (Faury et al. 2022)'
         self.param_norm_ub = S
         self.arm_norm_ub = 1.0
         self.dim = arm_set[0].shape[0]

@@ -28,7 +28,7 @@ conf_width : float
 
 class Gloc:
     def __init__(self, arm_set, kappa, R, S, model, delta):
-        self.name = 'GLOC'
+        self.name = 'GLOC (Jun et al. 2017)'
         self.model = model
         self.param_norm_ub = S
         self.arm_norm_ub = 1.0
