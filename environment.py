@@ -21,7 +21,7 @@ class GLMBandit:
             self.L = config['num_arms']
             self.d = config['theta_dim']
             self.S = config['theta_norm']
-            self.full_norm = config.get('full_norm', None) if config['full_norm'] is not None else False
+            self.full_norm = config.get('full_norm', False) 
             self.theta = self.create_parameter()
             self.M = 1.0
             self.T = config['horizon_length']
