@@ -50,29 +50,14 @@ class GLMBandit:
     
     def create_arms(self):
         arms = []
-        # i_max = self.rng.integers(self.L)
-        # x_max = self.theta / np.linalg.norm(self.theta) * self.M
         i = 0
         while(i < self.L):
-            # x_proxy = self.rng.uniform(-1, 1, size=self.d)
-            # x_i = self.rng.uniform(0, self.M) * x_proxy / np.linalg.norm(x_proxy)
             x_proxy = self.rng.normal(0.0, 1.0, size=(self.d,))
             norm = np.linalg.norm(x_proxy)
             r = self.rng.uniform(0.0, 1.0) ** (1.0 / self.d)
             x_i = x_proxy * r / norm
             arms.append(x_i)
             i += 1
-            # if i == i_max:
-            #     arms.append(x_max)
-            #     i += 1
-            # else:
-            #     x_proxy = self.rng.uniform(-1, 1, size=self.d)
-            #     x_i = self.rng.uniform(0, self.M) * x_proxy / np.linalg.norm(x_proxy)
-            #     if self.model == 'Logistic':
-            #         if np.dot(x_i, self.theta) < -0.05 * np.dot(x_max, self.theta):
-            #             arms.append(x_i)
-            #arms.append(x_i)
-            #            i += 1
         return arms
     
     def calculate_kappa(self):
@@ -86,13 +71,6 @@ class GLMBandit:
             elif self.model == 'Probit':
                 mu_dot = dprobit(dotp)
             min_mu_dot = min_mu_dot if np.min(mu_dot) > min_mu_dot else np.min(mu_dot)
-            # for i, x in enumerate(arm_set):
-            #     if self.model == 'Logistic':
-            #         mu_dot = dsigmoid(np.dot(x, self.theta))
-            #     elif self.model == 'Probit':
-            #         mu_dot = dprobit(np.dot(x, self.theta))
-            #     if mu_dot < min_mu_dot:
-            #         min_mu_dot = mu_dot
         return 1.0/min_mu_dot
     
     def get_best_arm(self):
@@ -127,7 +105,6 @@ class GLMBandit:
             rewards = [probit(dot_product) for dot_product in dot_products]
             noisy_rewards = [float(self.rng.normal(dot_product) > 0.0) for dot_product in dot_products]
             regrets = [self.max_reward[self.t] - reward for reward in rewards]
-        #print("Best arm:", self.best_arm[self.t])
         self.t += 1
         return noisy_rewards, regrets, self.arms[self.t % self.T]
     

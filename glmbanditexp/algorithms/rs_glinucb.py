@@ -45,7 +45,6 @@ class RS_GLinUCB:
                     max_ind = i
                 self.warmup_flag = True
         if self.warmup_flag:
-            # print('Warm up round at step', self.t)
             max_x_V_inv = np.dot(self.V_inv, max_x)
             self.V_inv -= np.outer(max_x_V_inv, max_x_V_inv) / (1.0 + max_norm)
             self.a_t = max_ind
@@ -55,7 +54,6 @@ class RS_GLinUCB:
             # Check determinant
             if np.linalg.det(self.curr_H) >= ((1 + self.doubling_constant) * np.linalg.det(self.prev_H)):
                 self.prev_H = self.curr_H
-                # print("Det doubled")
                 thth, succ_flag = solve_glm_mle(self.theta_hat_tau, np.array(self.non_warm_up_X), \
                                                 np.array(self.non_warm_up_Y), self.lmbda/2, self.model)
                 if succ_flag:
@@ -87,12 +85,11 @@ class RS_GLinUCB:
                 if ucb_ind > max_ind:
                     max_ind = ucb_ind
                     self.a_t = i
-        #print("Arm played", self.a_t)
         return self.a_t
     
     def update(self, reward, regret, next_arms):
         self.regret_arr.append(regret)
-        # If this was a warm up round, append (x, y) to warm-up set, re-compute theta_hat_w
+        # If this was a warm up round, append (x, y) to warm-up set (and non-warm-up set), re-compute theta_hat_w
         if self.warmup_flag:
             self.warm_up_X.append(self.arms[self.a_t])
             self.warm_up_Y.append(reward)
