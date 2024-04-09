@@ -3,7 +3,7 @@ from glmbanditexp.utils.utils import mat_norm, solve_glm_mle, dsigmoid, dprobit
 
 class RS_GLinUCB:
     def __init__(self, arm_set, kappa, R, S, model, T, delta):
-        self.name = 'RS-GLinUCB (Ours)'
+        self.name = 'RS-GLinUCB (This work)'
         self.arms = arm_set
         self.d = self.arms[0].shape[0]
         self.K = len(self.arms)
