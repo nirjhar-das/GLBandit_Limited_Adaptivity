@@ -99,7 +99,12 @@ class GLMBandit:
                            for a in action]
         if self.model == 'Logistic':
             rewards = [sigmoid(dot_product) for dot_product in dot_products]
-            noisy_rewards = [float(self.rng.binomial(1, reward)) for reward in rewards]
+            try:
+                noisy_rewards = [float(self.rng.binomial(1, reward)) for reward in rewards]
+            except:
+                print(rewards)
+                rewards = np.where(rewards > 0, rewards, 0).tolist()
+                noisy_rewards = [float(self.rng.binomial(1, reward)) for reward in rewards]
             regrets = [self.max_reward[self.t] - reward for reward in rewards]
         elif self.model == 'Probit':
             rewards = [probit(dot_product) for dot_product in dot_products]
