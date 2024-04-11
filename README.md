@@ -1,4 +1,4 @@
-Official Code base for the paper [_Optimal Regret with Limited Adaptivity for Generalized Linear Contextual Bandits_](https://arxiv.org/abs/) by [Ayush Sawarni](https://sawarniayush.github.io/), [Nirjhar Das](https://nirjhar-das.github.io/), [Siddharth Barman](https://www.csa.iisc.ac.in/~barman/) and [Gaurav Sinha](https://sinhagaurav.github.io/).
+Official Code base for the paper [_Optimal Regret with Limited Adaptivity for Generalized Linear Contextual Bandits_](https://arxiv.org/abs/2404.06831) by [Ayush Sawarni](https://sawarniayush.github.io/), [Nirjhar Das](https://nirjhar-das.github.io/), [Siddharth Barman](https://www.csa.iisc.ac.in/~barman/) and [Gaurav Sinha](https://sinhagaurav.github.io/).
 
 ## Installation
 The code base has dependency on basic packages listed in [requirements.txt](./requirements.txt). It can be installed via the following command:
@@ -18,3 +18,18 @@ This code base implements `RS-GLinUCB` (Algorithm 2 in the aforementioned paper)
 The Jupyter notebook [simulations.ipynb](./simulations.ipynb) implements the regret simulation experiements form the paper for the logistic and the probit reward models. It also implements the simulation for actual time taken by `RS-GLinUCB` and `ECOLog`. The result of these experiments can be seen below.
 
 ![all_results](./Results/Combined_Result.png)
+
+### Reference
+
+If you find this work useful in your research, please consider citing it.
+
+~~~bibtex
+@article{sawarni2024optimal,
+    title={Optimal Regret with Limited Adaptivity for Generalized Linear Contextual Bandits},
+    author={Sawarni, Ayush and Das, Nirjhar and Barman, Siddharth and Sinha, Gaurav},
+    year={2024},
+    eprint={2404.06831},
+    archivePrefix={arXiv},
+    primaryClass={cs.LG}
+}
+~~~
