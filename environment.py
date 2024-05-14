@@ -95,8 +95,13 @@ class GLMBandit:
 
 
     def step(self, action):
-        dot_products = [np.dot(self.theta, self.arms[self.t][a]) \
-                           for a in action]
+        try:
+            dot_products = [np.dot(self.theta, self.arms[self.t][a]) \
+                            for a in action]
+        except:
+            print(action)
+            self.t += 1
+            return 0, 1, self.arms[self.t % self.T]
         if self.model == 'Logistic':
             rewards = [sigmoid(dot_product) for dot_product in dot_products]
             try:
