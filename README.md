@@ -25,7 +25,7 @@ If you find this work useful in your research, please consider citing it.
 
 ~~~bibtex
 @article{sawarni2024optimal,
-    title={Optimal Regret with Limited Adaptivity for Generalized Linear Contextual Bandits},
+    title={Generalized Linear Bandits with Limited Adaptivity},
     author={Sawarni, Ayush and Das, Nirjhar and Barman, Siddharth and Sinha, Gaurav},
     year={2024},
     eprint={2404.06831},
